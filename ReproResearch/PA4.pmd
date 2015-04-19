@@ -1,0 +1,82 @@
+---
+title: "PA4.pmd"
+author: "Rujuta Joshi"
+date: "Sunday, April 19, 2015"
+output: html_document
+---
+
+This is markdown document for the peer assignment 1 of reproducible Research course of Coursera Data Science Specialisation. 
+
+###Initial steps in Project###
+- show the code needed to process and load the data. 
+- process the data in a format necessary for the analysis. 
+
+```{r}
+ls()
+rm(list=ls())
+setwd("F:/Rujuta/Coursera/ReproResearch")
+setInternet2(use=TRUE)
+fileurl <- "http://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+download.file(fileurl, destfile="./Factivity.zip",mode="wb")
+unzip("./Factivity.zip")
+data <- read.csv("./activity.csv", header=TRUE)
+head(data)
+
+```
+
+
+### What is mean total number of steps taken per day?###
+- For this part of the assignment, you can ignore the missing values in the dataset.
+
+- Make a histogram of the total number of steps taken each day
+
+- Calculate and report the mean and median total number of steps taken per day
+
+```{r}
+
+#Q1. what is mean total number of steps taken per day 
+totalstepbyday <- by(data[ ,1],INDICES=data$date,sum,na.rm=TRUE)
+#histogram of total steps by day 
+hist(totalstepbyday)
+mean(totalstepbyday)
+median(totalstepbyday)
+```
+
+
+###What is the average daily activity pattern?###
+- Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
+- Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+
+```{r}
+#What is average daily activity pattern?
+#making a time series plot of 5 min and averaged across all days 
+intervalfactor <- as.factor(data$interval)
+data2 <- data
+intervalfactor -> data2$interval
+#average steps per time interval calculated average_steps_by_each_time_interval <- by(data[ ,1],intervalfactor,mean, na.rm=TRUE)
+steps <- by(data[,3], intervalfactor,mean,na.rm=TRUE)
+average_steps_by_each_time_interval <- by(data[ ,1],intervalfactor,mean, na.rm=TRUE)
+plot(average_steps_by_each_time_interval~steps, type="l")
+maxsteps <- data2[max(average_steps_by_each_time_interval),]
+print("the maximum number of steps taken in an average time interval are")
+maxsteps
+
+# rough data4 <- cbind(steps, average_steps_by_each_time_interval)
+# rough which.max(data4[average_steps_by_each_time_interval])
+```
+
+
+
+###Imputing missing values###
+
+- Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+
+- Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
+- Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+- Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+- Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
