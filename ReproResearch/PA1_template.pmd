@@ -1,0 +1,44 @@
+---
+title: "PA1_template.pmd"
+author: "Rujuta Joshi"
+date: "Sunday, April 19, 2015"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+totalstepbyday <- by(data[ ,1],date,sum,na.rm=TRUE)
+#histogram of total steps by day 
+```{r,echo=FALSE}
+
+hist(totalstepbyday)
+mean(totalstepbyday)
+median(totalstepbyday)
+
+#What is average daily activity pattern?
+#making a time series plot of 5 min and averaged across all days 
+intervalfactor <- as.factor(data$interval)
+data2 <- data
+intervalfactor -> data2$interval
+#average steps per time interval calculated average_steps_by_each_time_interval <- by(data[ ,1],intervalfactor,mean, na.rm=TRUE)
+steps <- by(data[,3], intervalfactor,mean,na.rm=TRUE)
+average_steps_by_each_time_interval <- by(data[ ,1],intervalfactor,mean, na.rm=TRUE)
+
+plot(average_steps_by_each_time_interval~steps, type="l")
+plot(average_steps_by_each_time_interval~steps, type="l")
+```
